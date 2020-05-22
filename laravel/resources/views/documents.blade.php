@@ -50,7 +50,7 @@
             @enderror
         </form>
         <div class="row d-flex justify-content-center">
-        {{ $documents->links() }}
+            {{ $documents->links() }}
         </div>
     </div>
 

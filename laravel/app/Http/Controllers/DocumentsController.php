@@ -11,9 +11,7 @@ class DocumentsController extends Controller
 {
     public function index()
     {
-        //$documents = Document::latest()->get()->paginate(20);
         $documents = Document::simplePaginate(20);
-        //return view('documents', ['documents' => $documents]);
         return view('documents')->with('documents', $documents);
     }
 
