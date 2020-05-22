@@ -32,12 +32,11 @@
 </div>
 
 <div class="container">
-
     <div class="text-center upload">
         <form action="{{ route('documents.create') }}" enctype="multipart/form-data" method="post">
             @csrf
             <input id="custom" type="file" name="document" onchange="this.form.submit()" required>
-            <label class="btn btn-success">
+            <label class="btn">
                 Add new document
                 <input
                     type="file"
@@ -49,9 +48,11 @@
             <p class="help">{{ $errors->first('document') }}</p>
             @enderror
         </form>
+
         <div class="row d-flex justify-content-center">
             {{ $documents->links() }}
         </div>
+
     </div>
 
     <div class="row">
@@ -80,9 +81,11 @@
             </div>
         @endfor
     </div>
+
     <div class="row d-flex justify-content-center">
         {{ $documents->links() }}
     </div>
+
 </div>
 </body>
 </html>
@@ -95,6 +98,12 @@
 
     .text-center.upload input {
         display: none
+    }
+
+    .text-center.upload .help {
+        color: white;
+        font-weight: bold;
+        text-decoration: underline;
     }
 
     .text-center .btn {

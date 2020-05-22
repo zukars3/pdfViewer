@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Document;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
+use App\Http\Requests\CreateDocumentRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Imagick;
@@ -17,16 +17,12 @@ class DocumentsController extends Controller
         return view('documents')->with('documents', $documents);
     }
 
-    public function create(Request $request): Redirector
+    public function create(CreateDocumentRequest $request): RedirectResponse
     {
-        request()->validate([
-            'document' => 'required|mimes:pdf|max:12000'
-        ]);
-
         $fileName = $request->file('document')->getClientOriginalName();
         $hashName = substr($request->file('document')->hashName(), 0, -3);
 
-        request()->file('document')->store('public/files/documents');
+        $request->file('document')->store('public/files/documents');
 
         Document::create([
             'name' => $fileName,
@@ -40,9 +36,10 @@ class DocumentsController extends Controller
         );
 
         return redirect(route('documents.index'));
+
     }
 
-    public function destroy(Document $document): Redirector
+    public function destroy(Document $document): RedirectResponse
     {
         $document->delete();
         Storage::disk('public')->delete([
