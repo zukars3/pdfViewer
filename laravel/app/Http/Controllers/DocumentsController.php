@@ -4,23 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Document;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use Imagick;
 
 class DocumentsController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $documents = Document::simplePaginate(20);
         return view('documents')->with('documents', $documents);
     }
 
-    public function show(Document $document)
-    {
-        return redirect($document->path);
-    }
-
-    public function create(Request $request)
+    public function create(Request $request): Redirector
     {
         request()->validate([
             'document' => 'required|mimes:pdf|max:12000'
@@ -45,7 +42,7 @@ class DocumentsController extends Controller
         return redirect(route('documents.index'));
     }
 
-    public function destroy(Document $document)
+    public function destroy(Document $document): Redirector
     {
         $document->delete();
         Storage::disk('public')->delete([
@@ -56,7 +53,7 @@ class DocumentsController extends Controller
         return redirect(route('documents.index'));
     }
 
-    public function generateThumbnail($source, $target, $size = 256)
+    public function generateThumbnail(string $source, string $target): bool
     {
         if (file_exists($source) && !is_dir($source)) {
             if (mime_content_type($source) != 'application/pdf') {
@@ -84,7 +81,9 @@ class DocumentsController extends Controller
             $image->clear();
             $image->destroy();
 
+            return true;
         }
+
         return false;
     }
 }
