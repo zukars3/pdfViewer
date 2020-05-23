@@ -2,4 +2,8 @@
 ### PDF file view with upload and thumbnail generation functionality
 
 ##### Change database settings in .env.example and rename it to .env.
-##### Run command "php artisan serve"
+##### Run following commands:
+###### composer install
+###### php artisan key:generate
+###### php artisan storage:link
+###### php artisan serve
