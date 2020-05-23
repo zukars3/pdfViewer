@@ -208,9 +208,9 @@
     $(document).ready(function () {
         $('#modal-document').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
-            var recipient = button.data('path')
+            var document = button.data('path')
             var modal = $(this)
-            modal.find('#pdf').attr('data', recipient)
+            modal.find('#pdf').attr('data', document)
         })
     });
 </script>
