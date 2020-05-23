@@ -31,6 +31,7 @@
     </div>
 </div>
 
+
 <div class="container">
     <div class="text-center upload">
         <form action="{{ route('documents.create') }}" enctype="multipart/form-data" method="post">
@@ -55,38 +56,47 @@
 
     </div>
 
-    <div class="row">
-        @for($i = 0; $i < count($documents); $i++)
-            <div class="col-md-3">
-                <div class="document">
-                    <a href="{{ $documents[$i]->path }}"
-                       data-toggle="modal"
-                       data-target="#modal-document"
-                       data-path="{{ $documents[$i]->path }}"
-                    >
-                        <img
-                            src="{{ $documents[$i]->thumbnail }}"
-                            alt="Image of the first page of {{ $documents[$i]->name }}"
+    @if(count($documents) == 0)
+        <div class="text-center empty">
+            <h2>Nothing to show here yet...</h2>
+        </div>
+    @else
+
+        <div class="row">
+            @for($i = 0; $i < count($documents); $i++)
+                <div class="col-md-3">
+                    <div class="document">
+                        <a href="{{ $documents[$i]->path }}"
+                           data-toggle="modal"
+                           data-target="#modal-document"
+                           data-path="{{ $documents[$i]->path }}"
                         >
-                    </a>
-                    <form class="test-form" action="{{ route('documents.destroy', $documents[$i]) }}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-responsive btn-danger" type="submit">X</button>
-                    </form>
-                    <div class="overlay">
-                        <div class="text">{{ $documents[$i]->name }}</div>
+                            <img
+                                src="{{ $documents[$i]->thumbnail }}"
+                                alt="Image of the first page of {{ $documents[$i]->name }}"
+                            >
+                        </a>
+                        <form class="test-form" action="{{ route('documents.destroy', $documents[$i]) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button class="btn btn-responsive btn-danger" type="submit">X</button>
+                        </form>
+                        <div class="overlay">
+                            <div class="text">{{ $documents[$i]->name }}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endfor
-    </div>
+            @endfor
+        </div>
 
-    <div class="row d-flex justify-content-center">
-        {{ $documents->links() }}
-    </div>
+        <div class="row d-flex justify-content-center">
+            {{ $documents->links() }}
+        </div>
 
 </div>
+
+@endif
+
 </body>
 </html>
 
@@ -107,8 +117,7 @@
     }
 
     .text-center .btn {
-        border: 2px solid gray;
-        color: gray;
+        color: black;
         background-color: white;
         padding: 8px 20px;
         border-radius: 8px;
@@ -116,6 +125,13 @@
         font-weight: bold;
         margin-top: 20px;
         margin-bottom: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .empty {
+        margin-top: 30%;
+        color: white;
+        text-shadow: 3px 4px 3px rgba(0,0,0,0.3);
     }
 
     .col-md-3 {
