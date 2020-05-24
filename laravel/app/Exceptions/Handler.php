@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-use App\Http\Controllers\DocumentsController;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\PostTooLargeException;
 use Throwable;
@@ -31,10 +30,11 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
-     * @return void
+     * @param \Throwable $exception
      *
      * @throws \Exception
+     *
+     * @return void
      */
     public function report(Throwable $exception)
     {
@@ -44,19 +44,21 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable               $exception
      *
      * @throws \Throwable
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof PostTooLargeException) {
             request()->validate([
-                'document' => 'required|mimes:pdf|max:12000'
+                'document' => 'required|mimes:pdf|max:12000',
             ]);
         }
+
         return parent::render($request, $exception);
     }
 }
