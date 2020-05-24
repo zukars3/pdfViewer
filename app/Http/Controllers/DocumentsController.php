@@ -23,17 +23,17 @@ class DocumentsController extends Controller
         $fileName = $request->file('document')->getClientOriginalName();
         $hashName = substr($request->file('document')->hashName(), 0, -3);
 
-        $request->file('document')->store('public/files/documents');
+        $request->file('document')->store('files/documents', 'public');
 
         Document::create([
-            'name'      => $fileName,
-            'path'      => 'storage/files/documents/'.$hashName.'pdf',
-            'thumbnail' => 'storage/files/images/'.$hashName.'jpg',
+            'name' => $fileName,
+            'path' => 'public/files/documents/' . $hashName . 'pdf',
+            'thumbnail' => 'public/files/images/' . $hashName . 'jpg',
         ]);
 
         $this->generateThumbnail(
-            'storage/files/documents/'.$hashName.'pdf',
-            '/../images/'.$hashName.'jpg'
+            'storage/files/documents/' . $hashName . 'pdf',
+            '/../images/' . $hashName . 'jpg'
         );
 
         return redirect(route('documents.index'));
@@ -57,12 +57,12 @@ class DocumentsController extends Controller
                 return false;
             }
 
-            $target = dirname($source).'/'.$target;
+            $target = dirname($source) . '/' . $target;
             $page = 0;
 
             $image = new Imagick();
             $image->setResolution(180, 180);
-            $image->readImage($source."[$page]");
+            $image->readImage($source . "[$page]");
             $image->setImageFormat('jpeg');
             $image->setImageCompression(imagick::COMPRESSION_JPEG);
             $image->setImageCompressionQuality(0);
