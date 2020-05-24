@@ -14,7 +14,7 @@ class CreateDocumentRequest extends FormRequest
     public function rules()
     {
         return [
-            'document' => ['required', 'mimes:pdf', 'max:12000']
+            'document' => ['required', 'mimes:pdf', 'max:12000'],
         ];
     }
 }
