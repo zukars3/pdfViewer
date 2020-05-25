@@ -27,10 +27,6 @@ class DocumentsController extends Controller
         $documentPath = Storage::url('files/documents/' . $hashName . 'pdf');
         $thumbnailPath = Storage::url('files/images/' . $hashName . 'jpg');
 
-        //Storage::put('files/documents', 'document');
-
-        //dd($documentPath);
-
         $request->file('document')->store('files/documents', 'public');
 
         Document::create([
