@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Document;
 use App\Http\Requests\CreateDocumentRequest;
+use App\ThumbnailGenerationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,14 @@ use Imagick;
 
 class DocumentsController extends Controller
 {
+
+    private ThumbnailGenerationService $thumbnailGenerationService;
+
+    public function __construct(ThumbnailGenerationService $thumbnailGenerationService)
+    {
+        $this->thumbnailGenerationService = $thumbnailGenerationService;
+    }
+
     public function index(): View
     {
         $documents = Document::simplePaginate(20);
@@ -24,21 +33,18 @@ class DocumentsController extends Controller
         $fileName = $request->file('document')->getClientOriginalName();
         $hashName = substr($request->file('document')->hashName(), 0, -3);
 
-        $documentPath = Storage::url('files/documents/' . $hashName . 'pdf');
-        $thumbnailPath = Storage::url('files/images/' . $hashName . 'jpg');
+        $documentPath = $request->file('document')->store('files/documents', 'public');
 
-        $request->file('document')->store('files/documents', 'public');
-
-        Document::create([
+        $document = new Document([
             'name' => $fileName,
             'path' => $documentPath,
-            'thumbnail' => $thumbnailPath
         ]);
 
-        app('ThumbnailGenerationService')->generateThumbnail(
-            substr($documentPath, 1),
-            substr($thumbnailPath, 1)
-        );
+        $thumbnailPath = $this->thumbnailGenerationService->generate($document, $hashName);
+
+        $document->thumbnail = $thumbnailPath;
+
+        $document->save();
 
         return redirect(route('documents.index'));
     }

@@ -14,10 +14,18 @@ class Document extends Model
         parent::boot();
 
         static::deleting(function($document) {
-            Storage::disk('public')->delete([
-                substr($document->path, 8),
-                substr($document->thumbnail, 8),
+            Storage::delete([
+                Storage::disk('public')->delete($document->path),
+                Storage::disk('public')->delete($document->thumbnail)
             ]);
         });
+    }
+
+    public function getDocumentUrl() {
+        return Storage::url($this->path);
+    }
+
+    public function getThumbnailUrl() {
+        return Storage::url($this->thumbnail);
     }
 }

@@ -1,42 +1,33 @@
 <?php
 
-
 namespace App;
 
-
+use Illuminate\Support\Facades\Storage;
 use Imagick;
 
 class ThumbnailGenerationService
 {
-    public function generateThumbnail(string $source, string $target): bool
+    public function generate(Document $document, string $hashName): string
     {
-        if (file_exists($source) && !is_dir($source)) {
-            if (mime_content_type($source) != 'application/pdf') {
-                return false;
-            }
+        $thumbnailPath = 'files/images/' . $hashName . 'jpg';
 
-            $page = 0;
+        $source = Storage::disk('public')->path($document->path);
+        $target = Storage::disk('public')->path($thumbnailPath);
 
-            $image = new Imagick();
-            $image->setResolution(180, 180);
-            $image->readImage($source . "[$page]");
-            $image->setImageFormat('jpeg');
-            $image->setImageCompression(imagick::COMPRESSION_JPEG);
-            $image->setImageCompressionQuality(0);
-            $image->setImageBackgroundColor('white');
-            $image->setImageAlphaChannel(11);
-            $image->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
+        $image = new Imagick();
+        $image->setResolution(180, 180);
+        $image->readImage($source . "[0]");
+        $image->setImageFormat('jpeg');
+        $image->setImageCompression(imagick::COMPRESSION_JPEG);
+        $image->setImageCompressionQuality(0);
+        $image->setImageBackgroundColor('white');
+        $image->setImageAlphaChannel(11);
+        $image->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
 
-            if (!is_dir(dirname($target))) {
-                mkdir(dirname($target), 0777, true);
-            }
+        $image->writeimage($target);
+        $image->clear();
+        $image->destroy();
 
-            $image->writeimage($target);
-            $image->clear();
-            $image->destroy();
-
-            return true;
-        }
-        return false;
+        return $thumbnailPath;
     }
 }

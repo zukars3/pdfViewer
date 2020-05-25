@@ -14,10 +14,10 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
+        "intervention/image": "dev-master",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
-        "spatie/pdf-to-image": "^2.0"
+        "laravel/ui": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

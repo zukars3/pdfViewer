@@ -69,10 +69,10 @@
                         <a href="{{ $documents[$i]->path }}"
                            data-toggle="modal"
                            data-target="#modal-document"
-                           data-path="{{ $documents[$i]->path }}"
+                           data-path="{{ $documents[$i]->getDocumentUrl() }}"
                         >
                             <img
-                                src="{{ $documents[$i]->thumbnail }}"
+                                src="{{ $documents[$i]->getThumbnailUrl() }}"
                                 alt="Image of the first page of {{ $documents[$i]->name }}"
                             >
                         </a>
