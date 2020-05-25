@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Document;
 use App\Http\Requests\CreateDocumentRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Imagick;
@@ -23,17 +24,24 @@ class DocumentsController extends Controller
         $fileName = $request->file('document')->getClientOriginalName();
         $hashName = substr($request->file('document')->hashName(), 0, -3);
 
+        $documentPath = Storage::url('files/documents/' . $hashName . 'pdf');
+        $thumbnailPath = Storage::url('files/images/' . $hashName . 'jpg');
+
+        //Storage::put('files/documents', 'document');
+
+        //dd($documentPath);
+
         $request->file('document')->store('files/documents', 'public');
 
         Document::create([
             'name' => $fileName,
-            'path' => 'public/files/documents/' . $hashName . 'pdf',
-            'thumbnail' => 'public/files/images/' . $hashName . 'jpg',
+            'path' => $documentPath,
+            'thumbnail' => $thumbnailPath
         ]);
 
-        $this->generateThumbnail(
-            'storage/files/documents/' . $hashName . 'pdf',
-            '/../images/' . $hashName . 'jpg'
+        app('ThumbnailGenerationService')->generateThumbnail(
+            substr($documentPath, 1),
+            substr($thumbnailPath, 1)
         );
 
         return redirect(route('documents.index'));
@@ -42,17 +50,13 @@ class DocumentsController extends Controller
     public function destroy(Document $document): RedirectResponse
     {
         $document->delete();
-        Storage::disk('public')->delete([
-            substr($document->path, 8),
-            substr($document->thumbnail, 8),
-        ]);
 
         return redirect(route('documents.index'));
     }
 
     public function generateThumbnail(string $source, string $target): bool
     {
-        if (file_exists($source) && !is_dir($source)) {
+        if (Storage::exists($source)) {
             if (mime_content_type($source) != 'application/pdf') {
                 return false;
             }
