@@ -9,11 +9,11 @@ class Document extends Model
 {
     protected $fillable = ['name', 'path', 'thumbnail'];
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
-        static::deleting(function($document) {
+        static::deleting(function (Document $document) {
             Storage::delete([
                 Storage::disk('public')->delete($document->path),
                 Storage::disk('public')->delete($document->thumbnail)
@@ -21,11 +21,13 @@ class Document extends Model
         });
     }
 
-    public function getDocumentUrl() {
+    public function getDocumentUrl(): string
+    {
         return Storage::url($this->path);
     }
 
-    public function getThumbnailUrl() {
+    public function getThumbnailUrl(): string
+    {
         return Storage::url($this->thumbnail);
     }
 }

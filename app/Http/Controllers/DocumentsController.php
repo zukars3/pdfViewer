@@ -6,10 +6,7 @@ use App\Document;
 use App\Http\Requests\CreateDocumentRequest;
 use App\ThumbnailGenerationService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use Imagick;
 
 class DocumentsController extends Controller
 {
