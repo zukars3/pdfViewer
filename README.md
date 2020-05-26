@@ -24,6 +24,9 @@ The app has following functions:
 * Document opens in full screen modal and is in browsers pdf viewer with all the options for pdf files
 * Delete a document
 
+The app use MySQL as its database and bootstrap for frontend, the code is PSR-2 valid
+and this repository has StyleCI connected to it
+
 
 Under the hood:
 
