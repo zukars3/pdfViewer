@@ -1,9 +1,9 @@
 # pdfViewer
-### PDF file view with upload and thumbnail generation functionality
+### PDF file view with upload, delete and thumbnail generation functionality
 
 ![GitHub Logo](usage.gif)
 
-##### Change database settings in .env.example and rename it to .env.
+##### Change database and other settings in .env.example and rename it to .env
 ##### Please run following commands:
 ###### composer install
 ###### php artisan key:generate
