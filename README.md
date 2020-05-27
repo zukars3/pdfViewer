@@ -24,7 +24,7 @@ The app has following functions:
 * Delete a document
 
 The app uses MySQL as its database and bootstrap for frontend, the code is PSR-2 valid
-and this repository has StyleCI connected to it
+and this repository has StyleCI and Scrutinizer connected to it
   
 Under the hood:
 
